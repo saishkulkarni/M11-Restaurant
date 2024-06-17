@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import table.Customer;
+import dao.MyDao;
+import dto.Customer;
 
 @WebServlet("/customer-signup")
 public class CustomerSignupServlet extends HttpServlet {
@@ -28,8 +29,7 @@ public class CustomerSignupServlet extends HttpServlet {
 		long mobile = Long.parseLong(req.getParameter("mobile"));
 		String address = req.getParameter("address");
 		String password = req.getParameter("password");
-
-		System.out.println(name + "\n" + email + "\n" + mobile + "\n" + address + "\n" + password + "\n");
+		
 
 		Customer customer = new Customer();
 		customer.setAddress(address);
@@ -38,15 +38,10 @@ public class CustomerSignupServlet extends HttpServlet {
 		customer.setName(name);
 		customer.setPassword(password);
 
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("dev");
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
+		MyDao dao=new MyDao();
+		dao.saveCustomer(customer);
 
-		transaction.begin();
-		manager.persist(customer);
-		transaction.commit();
-
-		resp.getWriter().print("<h1>Account Created Success</h1>");
+		resp.getWriter().print("<h1 align='center' style='color:green'>Account Created Success</h1>");
 		req.getRequestDispatcher("customer-login.html").include(req, resp);
 
 	}
