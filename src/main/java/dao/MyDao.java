@@ -37,4 +37,8 @@ public class MyDao {
 		manager.persist(hotel);
 		transaction.commit();
 	}
+
+	public List<FoodItem> fetchFoodByHotel(int id) {
+		return manager.createQuery("select x from FoodItem x where hotel_id=?1").setParameter(1, id).getResultList();
+	}
 }
