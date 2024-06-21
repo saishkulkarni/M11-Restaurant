@@ -14,6 +14,7 @@
 	List<FoodItem> foodItems = (List<FoodItem>) request.getAttribute("foodItems");
 	%>
 	<div align="center">
+	<h1>View Food Items</h1>
 		<table border="1">
 			<tr>
 				<th>Name</th>
@@ -36,7 +37,7 @@
 					alt="<%=item.getName()%>" height="100px" width="100px"></td>
 				<td><%=item.getPrice()%></td>
 				<td><%=item.getHotel().getName()%></td>
-				<td><button>Edit</button></td>
+				<td><a href="edit-food-item?id=<%=item.getId()%>"><button>Edit</button></a></td>
 				<td><a href="delete-food-item?id=<%=item.getId()%>"><button>Delete</button></a></td>
 			</tr>
 			<%
@@ -44,6 +45,9 @@
 			%>
 
 		</table>
+		
+		<br>
+		<a href="hotel-home.html"><button>Back</button></a>
 	</div>
 </body>
 </html>

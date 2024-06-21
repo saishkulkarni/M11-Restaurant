@@ -17,7 +17,7 @@ import dto.Hotel;
 @WebServlet("/view-food-item")
 public class ViewFoodItems extends HttpServlet {
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
 		Hotel hotel=(Hotel) session.getAttribute("hotel");
 		if ( hotel != null) {
@@ -37,4 +37,5 @@ public class ViewFoodItems extends HttpServlet {
 			req.getRequestDispatcher("hotel-login.html").include(req, resp);
 		}
 	}
+	
 }

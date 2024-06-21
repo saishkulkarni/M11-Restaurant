@@ -51,4 +51,10 @@ public class MyDao {
 	public FoodItem fetchFoodById(int id) {
 		return manager.find(FoodItem.class, id);
 	}
+
+	public void updateFoodItem(FoodItem foodItem) {
+		transaction.begin();
+		manager.merge(foodItem);
+		transaction.commit();
+	}
 }
