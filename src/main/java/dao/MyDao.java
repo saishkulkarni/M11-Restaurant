@@ -47,7 +47,7 @@ public class MyDao {
 		manager.remove(foodItem);
 		transaction.commit();
 	}
-	
+
 	public FoodItem fetchFoodById(int id) {
 		return manager.find(FoodItem.class, id);
 	}
@@ -56,5 +56,13 @@ public class MyDao {
 		transaction.begin();
 		manager.merge(foodItem);
 		transaction.commit();
+	}
+
+	public List<Hotel> fetchAllHotels() {
+		return manager.createQuery("select x from Hotel x").getResultList();
+	}
+
+	public List<Customer> findCustomerByEmail(String email) {
+		return manager.createQuery("select x from Customer x where email=?1").setParameter(1, email).getResultList();
 	}
 }

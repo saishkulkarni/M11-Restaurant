@@ -1,11 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,23 +23,23 @@ public class CustomerSignupServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
-		long mobile = Long.parseLong(req.getParameter("mobile"));
-		String address = req.getParameter("address");
 		String password = req.getParameter("password");
-		
+		long mno = Long.parseLong(req.getParameter("mobile"));
+		String address = req.getParameter("address");
 
-		Customer customer = new Customer();
-		customer.setAddress(address);
-		customer.setEmail(email);
-		customer.setMobile(mobile);
-		customer.setName(name);
-		customer.setPassword(password);
+		MyDao dao = new MyDao();
 
-		MyDao dao=new MyDao();
-		dao.saveCustomer(customer);
-
-		resp.getWriter().print("<h1 align='center' style='color:green'>Account Created Success</h1>");
-		req.getRequestDispatcher("customer-login.html").include(req, resp);
+		List<Customer> list = dao.findCustomerByEmail(email);
+		if (list.isEmpty()) {
+			Customer c = new Customer(0, name, email, mno, address, AES.encrypt(password, "123"));
+			dao.saveCustomer(c);
+			resp.getWriter().print("<p align='center' style='color:green;'>Your account created successfully<p>");
+			req.getRequestDispatcher("customer-login.html").include(req, resp);
+		} else {
+			resp.getWriter().print(
+					"<p align='center' style='color:red;'>Account already exists with email - " + email + "</p>");
+			req.getRequestDispatcher("customer-signup.html").include(req, resp);
+		}
 
 	}
 
