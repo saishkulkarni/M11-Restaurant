@@ -1,3 +1,5 @@
+<%@page import="dto.CartItem"%>
+<%@page import="dto.Customer"%>
 <%@page import="org.apache.commons.codec.binary.Base64"%>
 <%@page import="dto.FoodItem"%>
 <%@page import="java.util.List"%>
@@ -12,9 +14,11 @@
 <body>
 	<%
 	List<FoodItem> foodItems = (List<FoodItem>) request.getAttribute("items");
+	Customer customer = (Customer) session.getAttribute("customer");
+	List<CartItem> cartItems = customer.getCart().getCartItems();
 	%>
 	<div align="center">
-	<h1>View Food Items</h1>
+		<h1>View Food Items</h1>
 		<table border="1">
 			<tr>
 				<th>Name</th>
@@ -39,17 +43,31 @@
 				<td><%=item.getPrice()%></td>
 				<td><%=item.getHotel().getName()%></td>
 				<td><button>-</button></td>
-				<td>0</td>
-				<td><button>+</button></td>	
+				<td>
+					<%
+					boolean flag = true;
+					for (CartItem cartItem : cartItems) {
+						if (cartItem.getName().equals(item.getName())) {
+					%><%=cartItem.getQuantity()%> <%
+ flag = false;
+ break;
+ }
+ }
+ if (flag) {
+ %> 0 <%
+ }
+ %>
+
+				</td>
+				<td><a href="add-to-cart?id=<%=item.getId()%>"><button>+</button></a></td>
 			</tr>
 			<%
 			}
 			%>
 
 		</table>
-		
-		<br>
-		<a href="view-menu"><button>Back</button></a>
+
+		<br> <a href="view-menu"><button>Back</button></a>
 	</div>
 </body>
 </html>

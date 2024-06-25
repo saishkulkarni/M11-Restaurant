@@ -65,4 +65,10 @@ public class MyDao {
 	public List<Customer> findCustomerByEmail(String email) {
 		return manager.createQuery("select x from Customer x where email=?1").setParameter(1, email).getResultList();
 	}
+
+	public void updateCustomer(Customer customer) {
+		transaction.begin();
+		manager.merge(customer);
+		transaction.commit();
+	}
 }

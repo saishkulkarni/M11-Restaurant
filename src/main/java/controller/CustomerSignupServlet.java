@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.MyDao;
+import dto.Cart;
 import dto.Customer;
 
 @WebServlet("/customer-signup")
@@ -31,7 +32,7 @@ public class CustomerSignupServlet extends HttpServlet {
 
 		List<Customer> list = dao.findCustomerByEmail(email);
 		if (list.isEmpty()) {
-			Customer c = new Customer(0, name, email, mno, address, AES.encrypt(password, "123"));
+			Customer c = new Customer(0, name, email, mno, address, AES.encrypt(password, "123"), new Cart());
 			dao.saveCustomer(c);
 			resp.getWriter().print("<p align='center' style='color:green;'>Your account created successfully<p>");
 			req.getRequestDispatcher("customer-login.html").include(req, resp);

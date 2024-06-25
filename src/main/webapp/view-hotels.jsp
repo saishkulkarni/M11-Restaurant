@@ -36,7 +36,7 @@
 			}
 			%>
 		</table><br>
-<a href="/my-hotel"><button>Back</button></a>
+<a href="customer-home.html"><button>Back</button></a>
 	</div>
 </body>
 </html>
