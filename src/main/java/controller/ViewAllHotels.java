@@ -10,20 +10,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.MyDao;
+import dto.Customer;
 import dto.Hotel;
 
 @WebServlet("/view-menu")
 public class ViewAllHotels extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		MyDao dao = new MyDao();
-		List<Hotel> hotels = dao.fetchAllHotels();
-		if (hotels.isEmpty()) {
-			resp.getWriter().print("<h1 align='center' style='color:red'>No Hotels Found</h1>");
-			req.getRequestDispatcher("index.html").include(req, resp);
+		Customer customer = (Customer) req.getSession().getAttribute("customer");
+		if (customer == null) {
+			resp.getWriter().print("<h1 align='center' style='color:red'>Invalid Session</h1>");
+			req.getRequestDispatcher("customer-login.html").include(req, resp);
 		} else {
-			req.setAttribute("hotels", hotels);
-			req.getRequestDispatcher("view-hotels.jsp").include(req, resp);
+			MyDao dao = new MyDao();
+			List<Hotel> hotels = dao.fetchAllHotels();
+			if (hotels.isEmpty()) {
+				resp.getWriter().print("<h1 align='center' style='color:red'>No Hotels Found</h1>");
+				req.getRequestDispatcher("customer-home.html").include(req, resp);
+			} else {
+				req.setAttribute("hotels", hotels);
+				req.getRequestDispatcher("view-hotels.jsp").include(req, resp);
+			}
 		}
 	}
 }

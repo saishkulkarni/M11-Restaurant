@@ -60,7 +60,7 @@ public class AddToCartServlet extends HttpServlet {
 				item.setStock(item.getStock()-1);
 				dao.updateFoodItem(item);
 				
-				req.getSession().setAttribute("customer", dao.findCustomerByEmail(customer.getEmail()));
+				req.getSession().setAttribute("customer", dao.findCustomerByEmail(customer.getEmail()).get(0));
 				
 				resp.getWriter().print("<h1 align='center' style='color:green'>Item Added to Cart</h1>");
 				req.getRequestDispatcher("view-menu").include(req, resp);

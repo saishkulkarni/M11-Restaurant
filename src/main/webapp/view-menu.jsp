@@ -42,7 +42,7 @@
 					alt="<%=item.getName()%>" height="100px" width="100px"></td>
 				<td><%=item.getPrice()%></td>
 				<td><%=item.getHotel().getName()%></td>
-				<td><button>-</button></td>
+				<td><a href="remove-from-cart?id=<%=item.getId()%>"><button>-</button></a></td>
 				<td>
 					<%
 					boolean flag = true;

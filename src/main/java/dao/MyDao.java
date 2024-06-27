@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import dto.CartItem;
 import dto.Customer;
 import dto.FoodItem;
 import dto.Hotel;
@@ -70,5 +71,21 @@ public class MyDao {
 		transaction.begin();
 		manager.merge(customer);
 		transaction.commit();
+	}
+
+	public void updateCartItem(CartItem cartItem) {
+		transaction.begin();
+		manager.merge(cartItem);
+		transaction.commit();
+	}
+
+	public void deleteCartItem(CartItem cartItem) {
+		transaction.begin();
+		manager.remove(cartItem);
+		transaction.commit();
+	}
+
+	public CartItem findCartItemById(int id) {
+		return manager.find(CartItem.class, id);
 	}
 }
