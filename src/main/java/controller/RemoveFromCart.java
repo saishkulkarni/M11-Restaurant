@@ -32,47 +32,41 @@ public class RemoveFromCart extends HttpServlet {
 			Cart cart = customer.getCart();
 			List<CartItem> cartItems = cart.getCartItems();
 
-			if (cartItems.isEmpty()) {
+			CartItem cartItem = null;
+			for (CartItem cartItem1 : cartItems) {
+				if (cartItem1.getName().equals(item.getName())) {
+					cartItem = cartItem1;
+					break;
+				}
+			}
+
+			if (cartItem == null) {
 				resp.getWriter().print("<h1 align='center' style='color:red'>Item Not Present in cart</h1>");
 				req.getRequestDispatcher("view-menu").include(req, resp);
 			} else {
-				CartItem cartItem = null;
-				for (CartItem cartItem1 : cartItems) {
-					if (cartItem1.getName().equals(item.getName())) {
-						cartItem = cartItem1;
-						break;
-					}
+				cartItem.setQuantity(cartItem.getQuantity() - 1);
+				cartItem.setPrice(cartItem.getPrice() - item.getPrice());
+				dao.updateCartItem(cartItem);
+
+				cart.setTotalPrice(cart.getCartItems().stream().mapToDouble(x -> x.getPrice()).sum());
+				dao.updateCart(cart);
+
+				if (cartItem.getQuantity() == 0) {
+					CartItem item2 = dao.findCartItemById(cartItem.getId());
+					cart.getCartItems().remove(item2);
+					dao.updateCart(cart);
+					dao.deleteCartItem(item2);
 				}
 
-				if (cartItem == null) {
-					resp.getWriter().print("<h1 align='center' style='color:red'>Item Not Present in cart</h1>");
-					req.getRequestDispatcher("view-menu").include(req, resp);
-				} else {
-					cartItem.setQuantity(cartItem.getQuantity() - 1);
-					cartItem.setPrice(cartItem.getPrice() - item.getPrice());
-					dao.updateCartItem(cartItem);
+				item.setStock(item.getStock() + 1);
+				dao.updateFoodItem(item);
 
-					if (cartItem.getQuantity() == 0) {
-						CartItem item2 = dao.findCartItemById(cartItem.getId());
-						cart.getCartItems().remove(item2);
-						customer.setCart(cart);
-						dao.updateCustomer(customer);
-						dao.deleteCartItem(item2);
-					}
+				req.getSession().setAttribute("customer", dao.findCustomerByEmail(customer.getEmail()).get(0));
 
-					cart.setTotalPrice(cart.getCartItems().stream().mapToDouble(x -> x.getPrice()).sum());
-					customer.setCart(cart);
-					dao.updateCustomer(customer);
-
-					item.setStock(item.getStock() + 1);
-					dao.updateFoodItem(item);
-
-					req.getSession().setAttribute("customer", dao.findCustomerByEmail(customer.getEmail()).get(0));
-
-					resp.getWriter().print("<h1 align='center' style='color:green'>Item Added to Cart</h1>");
-					req.getRequestDispatcher("view-menu").include(req, resp);
-				}
+				resp.getWriter().print("<h1 align='center' style='color:green'>Item Added to Cart</h1>");
+				req.getRequestDispatcher("view-menu").include(req, resp);
 			}
+
 		}
 	}
 }

@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import dto.Cart;
 import dto.CartItem;
 import dto.Customer;
 import dto.FoodItem;
@@ -87,5 +88,11 @@ public class MyDao {
 
 	public CartItem findCartItemById(int id) {
 		return manager.find(CartItem.class, id);
+	}
+
+	public void updateCart(Cart cart) {
+		transaction.begin();
+		manager.merge(cart);
+		transaction.commit();
 	}
 }
