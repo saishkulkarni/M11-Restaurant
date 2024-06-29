@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.MyDao;
 import dto.Cart;
 import dto.Customer;
+import dto.Order;
 
 @WebServlet("/customer-signup")
 public class CustomerSignupServlet extends HttpServlet {
@@ -32,7 +34,8 @@ public class CustomerSignupServlet extends HttpServlet {
 
 		List<Customer> list = dao.findCustomerByEmail(email);
 		if (list.isEmpty()) {
-			Customer c = new Customer(0, name, email, mno, address, AES.encrypt(password, "123"), new Cart());
+			List<Order> arrayList = new ArrayList<Order>();
+			Customer c = new Customer(0, name, email, mno, address, AES.encrypt(password, "123"), new Cart(),arrayList);
 			dao.saveCustomer(c);
 			resp.getWriter().print("<p align='center' style='color:green;'>Your account created successfully<p>");
 			req.getRequestDispatcher("customer-login.html").include(req, resp);
