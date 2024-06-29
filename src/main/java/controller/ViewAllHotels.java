@@ -17,11 +17,7 @@ import dto.Hotel;
 public class ViewAllHotels extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Customer customer = (Customer) req.getSession().getAttribute("customer");
-		if (customer == null) {
-			resp.getWriter().print("<h1 align='center' style='color:red'>Invalid Session</h1>");
-			req.getRequestDispatcher("customer-login.html").include(req, resp);
-		} else {
+	
 			MyDao dao = new MyDao();
 			List<Hotel> hotels = dao.fetchAllHotels();
 			if (hotels.isEmpty()) {
@@ -31,6 +27,5 @@ public class ViewAllHotels extends HttpServlet {
 				req.setAttribute("hotels", hotels);
 				req.getRequestDispatcher("view-hotels.jsp").include(req, resp);
 			}
-		}
 	}
 }

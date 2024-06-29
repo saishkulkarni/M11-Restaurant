@@ -20,18 +20,13 @@ import dto.Hotel;
 public class EditFoodItem extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		Hotel hotel = (Hotel) session.getAttribute("hotel");
-		if (hotel != null) {
+		
 			int id = Integer.parseInt(req.getParameter("id"));
 			MyDao dao = new MyDao();
 			FoodItem item = dao.fetchFoodById(id);
 			req.setAttribute("item", item);
 			req.getRequestDispatcher("edit-food-item.jsp").forward(req, resp);
-		}else {
-			resp.getWriter().print("<h1 align='center' style='color:red'>Invalid Session</h1>");
-			req.getRequestDispatcher("hotel-login.html").include(req, resp);
-		}
+		
 	}
 	
 	@Override
@@ -39,7 +34,6 @@ public class EditFoodItem extends HttpServlet{
 		HttpSession session=req.getSession();
 		Hotel hotel=(Hotel) session.getAttribute("hotel");
 		
-		if (hotel != null) {
 			String name = req.getParameter("name");
 			double price = Double.parseDouble(req.getParameter("price"));
 			String type = req.getParameter("type");
@@ -69,9 +63,6 @@ public class EditFoodItem extends HttpServlet{
 			
 			resp.getWriter().print("<h1 align='center' style='color:green'>Food Item Updated Success</h1>");
 			req.getRequestDispatcher("view-food-item").include(req, resp);
-		} else {
-			resp.getWriter().print("<h1 align='center' style='color:red'>Invalid Session</h1>");
-			req.getRequestDispatcher("hotel-login.html").include(req, resp);
-		}
+		
 	}
 }

@@ -17,11 +17,7 @@ import dto.FoodItem;
 public class ViewHotelFoods extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Customer customer = (Customer) req.getSession().getAttribute("customer");
-		if (customer == null) {
-			resp.getWriter().print("<h1 align='center' style='color:red'>Invalid Session</h1>");
-			req.getRequestDispatcher("customer-login.html").include(req, resp);
-		} else {
+		
 			int id = Integer.parseInt(req.getParameter("id"));
 			MyDao dao = new MyDao();
 			List<FoodItem> items = dao.fetchFoodByHotel(id);
@@ -32,6 +28,5 @@ public class ViewHotelFoods extends HttpServlet {
 				req.setAttribute("items", items);
 				req.getRequestDispatcher("view-menu.jsp").include(req, resp);
 			}
-		}
 	}
 }

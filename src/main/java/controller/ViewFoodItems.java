@@ -20,7 +20,7 @@ public class ViewFoodItems extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
 		Hotel hotel=(Hotel) session.getAttribute("hotel");
-		if ( hotel != null) {
+	
 			MyDao dao=new MyDao();
 			List<FoodItem> foodItems=dao.fetchFoodByHotel(hotel.getId());
 			if(foodItems.isEmpty()) {
@@ -32,10 +32,6 @@ public class ViewFoodItems extends HttpServlet {
 				req.getRequestDispatcher("view-food-item.jsp").include(req, resp);
 			}
 			
-		} else {
-			resp.getWriter().print("<h1 align='center' style='color:red'>Invalid Session</h1>");
-			req.getRequestDispatcher("hotel-login.html").include(req, resp);
-		}
 	}
 	
 }

@@ -19,10 +19,7 @@ public class PlaceOrder extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Customer customer = (Customer) req.getSession().getAttribute("customer");
-		if (customer == null) {
-			resp.getWriter().print("<h1 align='center' style='color:red'>Invalid Session</h1>");
-			req.getRequestDispatcher("customer-login.html").include(req, resp);
-		} else {
+		
 			Order order = new Order();
 			order.setDateTime(LocalDateTime.now());
 			order.setTotalPrice(customer.getCart().getTotalPrice());
@@ -39,6 +36,6 @@ public class PlaceOrder extends HttpServlet {
 
 			resp.getWriter().print("<h1 align='center' style='color:green'>Order Placed Successfully</h1>");
 			req.getRequestDispatcher("customer-home.html").include(req, resp);
-		}
+		
 	}
 }
